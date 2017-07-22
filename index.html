@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>
+        Demo
+    </title>
+</head>
+
+<body>
+    <div id="app" style="margin-left:40px;">
+        <h1>Demo</h1>
+        <h3> Issue with importing precompiled component</h3>
+        <p>First component (test1) is precompiled and generates Vue warning</p>
+        <p>Second component (test2) is generated from within page and results in no warning</p>
+        Parent: name = {{ test.name }}
+         <test1 :name="test.name"></test1> <!-- precompiled component -->
+        <test2 :name="test.name"></test2> <!-- component generated in html below -->
+    </div>
+
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.1/vue.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.2/vue.min.js"></script>
+    <script src="/dist/Test.js"></script>
+    <script>
+        Vue.component('test1', Test);
+        Vue.component('test2', {
+            template: "<div>Child: name = {{ name }}</div>",
+            props: ['name'],
+        });
+        vm = new Vue({
+            el: '#app',
+            data: {
+                test: { name: "Foo" }
+            },
+            created() {
+                let vm = this;
+                // change state of Parent after 2 secs.
+                setTimeout(function () { vm.test = { name: "Bar" } }, 2000);
+            }
+        });
+    </script>
+
+</body>
+
+
+</html>
